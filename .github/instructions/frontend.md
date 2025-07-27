@@ -1,74 +1,74 @@
-# フロントエンド実装指示書
+# Frontend Implementation Guide
 
-## 技術スタック
+## Technology Stack
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
-- SWR (データフェッチング)
-- React Hook Form (フォーム管理)
-- date-fns (日付操作)
+- SWR (Data fetching)
+- React Hook Form (Form management)
+- date-fns (Date manipulation)
 
-## プロジェクト構成
+## Project Structure
 ```
 frontend/
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx                 # ホームページ
+│   │   ├── page.tsx                 # Homepage
 │   │   ├── salons/
-│   │   │   ├── page.tsx            # 美容院一覧
+│   │   │   ├── page.tsx            # Salon list
 │   │   │   └── [id]/
-│   │   │       ├── page.tsx        # 美容院詳細
+│   │   │       ├── page.tsx        # Salon details
 │   │   │       └── booking/
-│   │   │           └── page.tsx    # 予約ページ
+│   │   │           └── page.tsx    # Booking page
 │   │   ├── reservations/
-│   │   │   └── page.tsx            # 予約確認・管理
+│   │   │   └── page.tsx            # Reservation management
 │   │   └── admin/
-│   │       ├── page.tsx            # 管理画面トップ
+│   │       ├── page.tsx            # Admin dashboard
 │   │       ├── salons/
-│   │       │   └── page.tsx        # 美容院管理
+│   │       │   └── page.tsx        # Salon management
 │   │       ├── staff/
-│   │       │   └── page.tsx        # スタッフ管理
+│   │       │   └── page.tsx        # Staff management
 │   │       └── reservations/
-│   │           └── page.tsx        # 予約管理
+│   │           └── page.tsx        # Reservation management
 │   ├── components/
-│   │   ├── ui/                     # 基本UIコンポーネント
-│   │   ├── salon/                  # 美容院関連コンポーネント
-│   │   ├── booking/                # 予約関連コンポーネント
-│   │   └── admin/                  # 管理画面コンポーネント
+│   │   ├── ui/                     # Basic UI components
+│   │   ├── salon/                  # Salon-related components
+│   │   ├── booking/                # Booking-related components
+│   │   └── admin/                  # Admin dashboard components
 │   ├── lib/
-│   │   ├── api.ts                  # API関数
-│   │   ├── types.ts                # 型定義
-│   │   └── utils.ts                # ユーティリティ関数
-│   └── hooks/                      # カスタムフック
+│   │   ├── api.ts                  # API functions
+│   │   ├── types.ts                # Type definitions
+│   │   └── utils.ts                # Utility functions
+│   └── hooks/                      # Custom hooks
 ├── public/
 ├── tailwind.config.js
 ├── next.config.js
 └── package.json
 ```
 
-## 実装すべき機能
+## Features to Implement
 
-### 1. ユーザー向け機能
-- 美容院検索・一覧表示
-- 美容院詳細情報表示
-- サービス・メニュー表示
-- スタッフ紹介
-- 予約カレンダー表示
-- 空き時間確認
-- 予約フォーム
-- 予約確認・変更・キャンセル
+### 1. User Features
+- Salon search and listing
+- Salon detail information display
+- Service and menu display
+- Staff introduction
+- Booking calendar display
+- Available time slots check
+- Booking form
+- Reservation confirmation, modification, and cancellation
 
-### 2. 管理者向け機能
-- 美容院情報管理
-- スタッフ管理
-- サービス・メニュー管理
-- 営業時間設定
-- 予約管理（確認・変更・キャンセル）
-- 売上レポート表示
+### 2. Admin Features
+- Salon information management
+- Staff management
+- Service and menu management
+- Business hours configuration
+- Reservation management (confirmation, modification, cancellation)
+- Sales report display
 
-## コンポーネント設計
+## Component Design
 
-### UIコンポーネント（components/ui/）
+### UI Components (components/ui/)
 - Button
 - Input
 - Select
@@ -78,68 +78,68 @@ frontend/
 - Calendar
 - TimePicker
 
-### 美容院コンポーネント（components/salon/）
+### Salon Components (components/salon/)
 - SalonCard
 - SalonDetail
 - ServiceMenu
 - StaffList
 
-### 予約コンポーネント（components/booking/）
+### Booking Components (components/booking/)
 - BookingCalendar
 - TimeSlots
 - BookingForm
 - ReservationCard
 
-### 管理画面コンポーネント（components/admin/）
+### Admin Components (components/admin/)
 - SalonManagement
 - StaffManagement
 - ReservationManagement
 
-## デザインガイドライン
+## Design Guidelines
 
-### カラーパレット
+### Color Palette
 ```css
-primary: #e91e63     /* ピンク */
-secondary: #9c27b0   /* パープル */
-accent: #ff5722      /* オレンジ */
-neutral: #f5f5f5     /* グレー */
-success: #4caf50     /* グリーン */
-warning: #ff9800     /* オレンジ */
-error: #f44336       /* レッド */
+primary: #e91e63     /* Pink */
+secondary: #9c27b0   /* Purple */
+accent: #ff5722      /* Orange */
+neutral: #f5f5f5     /* Gray */
+success: #4caf50     /* Green */
+warning: #ff9800     /* Orange */
+error: #f44336       /* Red */
 ```
 
-### レスポンシブデザイン
+### Responsive Design
 - Mobile First
-- ブレイクポイント: sm(640px), md(768px), lg(1024px), xl(1280px)
+- Breakpoints: sm(640px), md(768px), lg(1024px), xl(1280px)
 
-### アクセシビリティ
-- セマンティックHTML
-- ARIA属性の適切な使用
-- キーボードナビゲーション対応
-- 適切なコントラスト比
+### Accessibility
+- Semantic HTML
+- Proper use of ARIA attributes
+- Keyboard navigation support
+- Appropriate contrast ratios
 
-## API連携
+## API Integration
 
-### エンドポイント
+### Endpoints
 ```
-GET /api/salons              # 美容院一覧
-GET /api/salons/:id          # 美容院詳細
-GET /api/salons/:id/staff    # スタッフ一覧
-GET /api/salons/:id/services # サービス一覧
-GET /api/salons/:id/slots    # 空き時間
-POST /api/reservations       # 予約作成
-GET /api/reservations/:id    # 予約詳細
-PUT /api/reservations/:id    # 予約更新
-DELETE /api/reservations/:id # 予約キャンセル
+GET /api/salons              # Salon list
+GET /api/salons/:id          # Salon details
+GET /api/salons/:id/staff    # Staff list
+GET /api/salons/:id/services # Service list
+GET /api/salons/:id/slots    # Available time slots
+POST /api/reservations       # Create reservation
+GET /api/reservations/:id    # Reservation details
+PUT /api/reservations/:id    # Update reservation
+DELETE /api/reservations/:id # Cancel reservation
 ```
 
-### エラーハンドリング
-- 適切なエラーメッセージ表示
-- ローディング状態の表示
-- オフライン対応
+### Error Handling
+- Appropriate error message display
+- Loading state display
+- Offline support
 
-## パフォーマンス
-- 画像最適化
-- コード分割
-- キャッシュ戦略
-- SEO対応
+## Performance
+- Image optimization
+- Code splitting
+- Cache strategy
+- SEO optimization

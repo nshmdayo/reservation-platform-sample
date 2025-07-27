@@ -1,42 +1,42 @@
-# バックエンド実装指示書
+# Backend Implementation Guide
 
-## 技術スタック
+## Technology Stack
 - Go 1.21+
-- Gin (Webフレームワーク)
+- Gin (Web framework)
 - GORM (ORM)
-- PostgreSQL (データベース)
-- Redis (キャッシュ・セッション)
-- JWT (認証)
+- PostgreSQL (Database)
+- Redis (Cache & Session)
+- JWT (Authentication)
 - Docker & Docker Compose
 
-## プロジェクト構成
+## Project Structure
 ```
 backend/
 ├── cmd/
 │   └── server/
-│       └── main.go                 # エントリーポイント
+│       └── main.go                 # Entry point
 ├── internal/
 │   ├── api/
-│   │   ├── handlers/               # HTTPハンドラー
+│   │   ├── handlers/               # HTTP handlers
 │   │   │   ├── salon.go
 │   │   │   ├── staff.go
 │   │   │   ├── service.go
 │   │   │   ├── reservation.go
 │   │   │   └── auth.go
-│   │   ├── middleware/             # ミドルウェア
+│   │   ├── middleware/             # Middleware
 │   │   │   ├── auth.go
 │   │   │   ├── cors.go
 │   │   │   └── logging.go
 │   │   └── routes/
-│   │       └── routes.go           # ルート定義
+│   │       └── routes.go           # Route definitions
 │   ├── domain/
-│   │   ├── models/                 # ドメインモデル
+│   │   ├── models/                 # Domain models
 │   │   │   ├── salon.go
 │   │   │   ├── staff.go
 │   │   │   ├── service.go
 │   │   │   ├── reservation.go
 │   │   │   └── user.go
-│   │   └── repositories/           # リポジトリインターフェース
+│   │   └── repositories/           # Repository interfaces
 │   │       ├── salon.go
 │   │       ├── staff.go
 │   │       ├── service.go
@@ -44,39 +44,39 @@ backend/
 │   │       └── user.go
 │   ├── infrastructure/
 │   │   ├── database/
-│   │   │   ├── connection.go       # DB接続
-│   │   │   └── migrations/         # マイグレーション
-│   │   ├── repositories/           # リポジトリ実装
+│   │   │   ├── connection.go       # DB connection
+│   │   │   └── migrations/         # Migrations
+│   │   ├── repositories/           # Repository implementations
 │   │   │   ├── salon.go
 │   │   │   ├── staff.go
 │   │   │   ├── service.go
 │   │   │   ├── reservation.go
 │   │   │   └── user.go
 │   │   └── cache/
-│   │       └── redis.go            # Redis操作
-│   ├── services/                   # ビジネスロジック
+│   │       └── redis.go            # Redis operations
+│   ├── services/                   # Business logic
 │   │   ├── salon.go
 │   │   ├── staff.go
 │   │   ├── service.go
 │   │   ├── reservation.go
 │   │   └── auth.go
 │   └── config/
-│       └── config.go               # 設定管理
+│       └── config.go               # Configuration management
 ├── pkg/
-│   ├── logger/                     # ログ機能
-│   ├── validator/                  # バリデーション
-│   └── utils/                      # ユーティリティ
+│   ├── logger/                     # Logging functionality
+│   ├── validator/                  # Validation
+│   └── utils/                      # Utilities
 ├── docker-compose.yml
 ├── Dockerfile
 ├── go.mod
 └── go.sum
 ```
 
-## データベース設計
+## Database Design
 
-### テーブル定義
+### Table Definitions
 
-#### salons（美容院）
+#### salons (Beauty salons)
 ```sql
 CREATE TABLE salons (
     id SERIAL PRIMARY KEY,
@@ -87,15 +87,15 @@ CREATE TABLE salons (
     email VARCHAR(255),
     website VARCHAR(255),
     image_url VARCHAR(500),
-    opening_hours JSONB,          -- 営業時間（曜日別）
-    latitude DECIMAL(10, 8),      -- 緯度
-    longitude DECIMAL(11, 8),     -- 経度
+    opening_hours JSONB,          -- Business hours (by day of week)
+    latitude DECIMAL(10, 8),      -- Latitude
+    longitude DECIMAL(11, 8),     -- Longitude
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-#### staff（スタッフ）
+#### staff (Staff members)
 ```sql
 CREATE TABLE staff (
     id SERIAL PRIMARY KEY,
@@ -103,32 +103,32 @@ CREATE TABLE staff (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     image_url VARCHAR(500),
-    specialties TEXT[],           -- 専門分野
+    specialties TEXT[],           -- Specialties
     experience_years INTEGER,
-    working_hours JSONB,          -- 勤務時間（曜日別）
+    working_hours JSONB,          -- Working hours (by day of week)
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-#### services（サービス・メニュー）
+#### services (Services/Menu)
 ```sql
 CREATE TABLE services (
     id SERIAL PRIMARY KEY,
     salon_id INTEGER NOT NULL REFERENCES salons(id),
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    price INTEGER NOT NULL,       -- 価格（円）
-    duration_minutes INTEGER NOT NULL, -- 所要時間（分）
-    category VARCHAR(100),        -- カテゴリ（カット、カラー、パーマなど）
+    price INTEGER NOT NULL,       -- Price (in yen)
+    duration_minutes INTEGER NOT NULL, -- Duration (in minutes)
+    category VARCHAR(100),        -- Category (Cut, Color, Perm, etc.)
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-#### users（ユーザー）
+#### users (Users)
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -144,7 +144,7 @@ CREATE TABLE users (
 );
 ```
 
-#### reservations（予約）
+#### reservations (Reservations)
 ```sql
 CREATE TABLE reservations (
     id SERIAL PRIMARY KEY,
@@ -163,111 +163,111 @@ CREATE TABLE reservations (
 );
 ```
 
-## API設計
+## API Design
 
-### 認証
+### Authentication
 ```
-POST /api/auth/register         # ユーザー登録
-POST /api/auth/login           # ログイン
-POST /api/auth/logout          # ログアウト
-GET  /api/auth/me              # ユーザー情報取得
-```
-
-### 美容院
-```
-GET    /api/salons             # 美容院一覧（検索・フィルタ対応）
-GET    /api/salons/:id         # 美容院詳細
-POST   /api/salons             # 美容院作成（管理者のみ）
-PUT    /api/salons/:id         # 美容院更新（管理者のみ）
-DELETE /api/salons/:id         # 美容院削除（管理者のみ）
+POST /api/auth/register         # User registration
+POST /api/auth/login           # Login
+POST /api/auth/logout          # Logout
+GET  /api/auth/me              # Get user information
 ```
 
-### スタッフ
+### Beauty Salons
 ```
-GET    /api/salons/:salon_id/staff        # スタッフ一覧
-GET    /api/staff/:id                     # スタッフ詳細
-POST   /api/salons/:salon_id/staff        # スタッフ作成
-PUT    /api/staff/:id                     # スタッフ更新
-DELETE /api/staff/:id                     # スタッフ削除
-```
-
-### サービス
-```
-GET    /api/salons/:salon_id/services     # サービス一覧
-GET    /api/services/:id                  # サービス詳細
-POST   /api/salons/:salon_id/services     # サービス作成
-PUT    /api/services/:id                  # サービス更新
-DELETE /api/services/:id                  # サービス削除
+GET    /api/salons             # Salon list (with search and filter)
+GET    /api/salons/:id         # Salon details
+POST   /api/salons             # Create salon (admin only)
+PUT    /api/salons/:id         # Update salon (admin only)
+DELETE /api/salons/:id         # Delete salon (admin only)
 ```
 
-### 予約
+### Staff
 ```
-GET    /api/reservations                  # 予約一覧（ユーザー別）
-GET    /api/reservations/:id              # 予約詳細
-POST   /api/reservations                  # 予約作成
-PUT    /api/reservations/:id              # 予約更新
-DELETE /api/reservations/:id              # 予約キャンセル
-GET    /api/salons/:salon_id/slots        # 空き時間取得
+GET    /api/salons/:salon_id/staff        # Staff list
+GET    /api/staff/:id                     # Staff details
+POST   /api/salons/:salon_id/staff        # Create staff
+PUT    /api/staff/:id                     # Update staff
+DELETE /api/staff/:id                     # Delete staff
 ```
 
-## ビジネスロジック
+### Services
+```
+GET    /api/salons/:salon_id/services     # Service list
+GET    /api/services/:id                  # Service details
+POST   /api/salons/:salon_id/services     # Create service
+PUT    /api/services/:id                  # Update service
+DELETE /api/services/:id                  # Delete service
+```
 
-### 予約システム
-1. **空き時間計算**
-   - スタッフの勤務時間
-   - 既存の予約
-   - サービスの所要時間を考慮
+### Reservations
+```
+GET    /api/reservations                  # Reservation list (by user)
+GET    /api/reservations/:id              # Reservation details
+POST   /api/reservations                  # Create reservation
+PUT    /api/reservations/:id              # Update reservation
+DELETE /api/reservations/:id              # Cancel reservation
+GET    /api/salons/:salon_id/slots        # Get available time slots
+```
 
-2. **予約バリデーション**
-   - 営業時間内の確認
-   - スタッフの勤務時間確認
-   - ダブルブッキング防止
-   - 過去日時の予約不可
+## Business Logic
 
-3. **予約確定処理**
-   - 在庫確認
-   - 料金計算
-   - 通知送信
+### Reservation System
+1. **Available Time Calculation**
+   - Staff working hours
+   - Existing reservations
+   - Service duration consideration
 
-### セキュリティ
-- JWT認証
-- パスワードハッシュ化（bcrypt）
-- CORS設定
-- レート制限
-- 入力値検証
+2. **Reservation Validation**
+   - Business hours verification
+   - Staff working hours verification
+   - Double booking prevention
+   - Past date/time booking prevention
 
-### パフォーマンス
-- データベースインデックス
-- Redisキャッシュ
-- ページネーション
-- 非同期処理
+3. **Reservation Confirmation Process**
+   - Availability check
+   - Price calculation
+   - Notification sending
 
-## エラーハンドリング
+### Security
+- JWT authentication
+- Password hashing (bcrypt)
+- CORS configuration
+- Rate limiting
+- Input validation
 
-### エラーレスポンス形式
+### Performance
+- Database indexing
+- Redis caching
+- Pagination
+- Asynchronous processing
+
+## Error Handling
+
+### Error Response Format
 ```json
 {
     "error": {
         "code": "VALIDATION_ERROR",
-        "message": "入力値に問題があります",
+        "message": "There is an issue with the input values",
         "details": [
             {
                 "field": "email",
-                "message": "有効なメールアドレスを入力してください"
+                "message": "Please enter a valid email address"
             }
         ]
     }
 }
 ```
 
-## ログ・監視
-- 構造化ログ（JSON形式）
-- アクセスログ
-- エラーログ
-- パフォーマンス監視
+## Logging & Monitoring
+- Structured logging (JSON format)
+- Access logs
+- Error logs
+- Performance monitoring
 
-## デプロイ・運用
-- Docker化
-- 環境変数による設定
-- ヘルスチェックエンドポイント
+## Deployment & Operations
+- Dockerization
+- Environment variable configuration
+- Health check endpoints
 - Graceful shutdown

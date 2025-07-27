@@ -47,8 +47,8 @@ type Service struct {
 	SalonID         uint           `json:"salon_id" gorm:"not null"`
 	Name            string         `json:"name" gorm:"not null"`
 	Description     string         `json:"description"`
-	Price           int            `json:"price" gorm:"not null"`            // 価格（円）
-	DurationMinutes int            `json:"duration_minutes" gorm:"not null"` // 所要時間（分）
+	Price           int            `json:"price" gorm:"not null"`            // Price (in yen)
+	DurationMinutes int            `json:"duration_minutes" gorm:"not null"` // Duration (in minutes)
 	Category        string         `json:"category"`
 	IsActive        bool           `json:"is_active" gorm:"default:true"`
 	Salon           *Salon         `json:"salon,omitempty"`

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Link from 'next/link'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: '美容院予約システム',
-  description: 'ホットペッパーのような美容院の予約システム',
+  title: 'Beauty Salon Reservation System',
+  description: 'A beauty salon reservation system like HotPepper',
 }
 
 export default function RootLayout({
@@ -24,18 +25,18 @@ export default function RootLayout({
                 <h1 className="text-xl font-bold text-primary-600">Beauty Reserve</h1>
               </div>
               <nav className="flex space-x-4">
-                <a href="/" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">
-                  ホーム
-                </a>
-                <a href="/salons" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">
-                  美容院検索
-                </a>
-                <a href="/reservations" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">
-                  予約管理
-                </a>
-                <a href="/login" className="btn-primary">
-                  ログイン
-                </a>
+                <Link href="/" className="text-gray-700 hover:text-gray-900">
+                  Home
+                </Link>
+                <Link href="/salons" className="text-gray-700 hover:text-gray-900">
+                  Salon Search
+                </Link>
+                <Link href="/reservations" className="text-gray-700 hover:text-gray-900">
+                  Reservation Management
+                </Link>
+                <Link href="/auth/login" className="text-gray-700 hover:text-gray-900">
+                  Login
+                </Link>
               </nav>
             </div>
           </div>

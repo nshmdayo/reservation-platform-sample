@@ -3,7 +3,7 @@ import { AuthResponse, LoginRequest, RegisterRequest, Salon, Reservation } from 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8082/api';
 
-// Axiosインスタンスの作成
+// Create Axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -11,7 +11,7 @@ const api = axios.create({
   },
 });
 
-// リクエストインターセプター（認証トークンの追加）
+// Request interceptor (add authentication token)
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
@@ -27,12 +27,12 @@ api.interceptors.request.use(
   }
 );
 
-// レスポンスインターセプター（エラーハンドリング）
+// Response interceptor (error handling)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // 認証エラーの場合、ローカルストレージからトークンを削除
+      // If authentication error, remove token from local storage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -43,7 +43,7 @@ api.interceptors.response.use(
   }
 );
 
-// 認証API
+// Authentication API
 export const authAPI = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post('/auth/login', data);
@@ -61,7 +61,7 @@ export const authAPI = {
   },
 };
 
-// 美容院API
+// Beauty Salon API
 export const salonAPI = {
   getSalons: async (params?: { page?: number; limit?: number; search?: string }) => {
     const response = await api.get('/salons', { params });
@@ -79,7 +79,7 @@ export const salonAPI = {
   },
 };
 
-// 予約API
+// Reservation API
 export const reservationAPI = {
   getReservations: async (): Promise<Reservation[]> => {
     const response = await api.get('/reservations');

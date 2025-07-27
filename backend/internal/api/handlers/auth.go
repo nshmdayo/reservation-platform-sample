@@ -29,9 +29,9 @@ type AuthResponse struct {
 	User  models.User `json:"user"`
 }
 
-var jwtSecret = []byte("your-secret-key") // 本来は環境変数から取得
+var jwtSecret = []byte("your-secret-key") // Should be obtained from environment variables
 
-// Register ユーザー登録
+// Register User registration
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -39,7 +39,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// パスワードハッシュ化
+	// Hash password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
@@ -59,14 +59,14 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// JWTトークン生成
+	// Generate JWT token
 	token, err := generateJWT(user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
 
-	// パスワードハッシュを除去
+	// Remove password hash
 	user.PasswordHash = ""
 
 	c.JSON(http.StatusCreated, AuthResponse{
@@ -75,7 +75,7 @@ func Register(c *gin.Context) {
 	})
 }
 
-// Login ログイン
+// Login User login
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -89,20 +89,20 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// パスワード確認
+	// Verify password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	// JWTトークン生成
+	// Generate JWT token
 	token, err := generateJWT(user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
 
-	// パスワードハッシュを除去
+	// Remove password hash
 	user.PasswordHash = ""
 
 	c.JSON(http.StatusOK, AuthResponse{
@@ -111,7 +111,7 @@ func Login(c *gin.Context) {
 	})
 }
 
-// GetProfile ユーザー情報取得
+// GetProfile Get user information
 func GetProfile(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -125,17 +125,17 @@ func GetProfile(c *gin.Context) {
 		return
 	}
 
-	// パスワードハッシュを除去
+	// Remove password hash
 	user.PasswordHash = ""
 
 	c.JSON(http.StatusOK, user)
 }
 
-// generateJWT JWTトークン生成
+// generateJWT Generate JWT token
 func generateJWT(userID uint) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userID,
-		"exp":     time.Now().Add(time.Hour * 24 * 7).Unix(), // 7日間有効
+		"exp":     time.Now().Add(time.Hour * 24 * 7).Unix(), // Valid for 7 days
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

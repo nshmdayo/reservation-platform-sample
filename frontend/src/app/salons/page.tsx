@@ -25,13 +25,13 @@ export default function SalonsPage() {
       setSalons(response.data || [])
     } catch (error) {
       console.error('Failed to fetch salons:', error)
-      // サンプルデータで代替
+      // Substitute with sample data
       setSalons([
         {
           id: 1,
           name: 'Hair Salon Tokyo',
-          description: '東京で人気の美容院です',
-          address: '東京都渋谷区渋谷1-1-1',
+          description: 'Popular beauty salon in Tokyo',
+          address: '1-1-1 Shibuya, Shibuya-ku, Tokyo',
           phone: '03-1234-5678',
           image_url: 'https://via.placeholder.com/300x200',
           created_at: '2024-01-01',
@@ -40,8 +40,8 @@ export default function SalonsPage() {
         {
           id: 2,
           name: 'Beauty Studio Shibuya',
-          description: 'スタイリッシュなカットが自慢です',
-          address: '東京都渋谷区渋谷2-2-2',
+          description: 'Stylish cuts are our specialty',
+          address: '2-2-2 Shibuya, Shibuya-ku, Tokyo',
           phone: '03-2345-6789',
           image_url: 'https://via.placeholder.com/300x200',
           created_at: '2024-01-01',
@@ -50,8 +50,8 @@ export default function SalonsPage() {
         {
           id: 3,
           name: 'Cut & Color Harajuku',
-          description: 'カラーリングの専門店です',
-          address: '東京都渋谷区神宮前1-1-1',
+          description: 'Hair coloring specialty salon',
+          address: '1-1-1 Jingumae, Shibuya-ku, Tokyo',
           phone: '03-3456-7890',
           image_url: 'https://via.placeholder.com/300x200',
           created_at: '2024-01-01',
@@ -72,20 +72,20 @@ export default function SalonsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">美容院を探す</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">Find Beauty Salons</h1>
         
-        {/* 検索フォーム */}
+        {/* Search Form */}
         <form onSubmit={handleSearchSubmit} className="mb-6">
           <div className="flex gap-4">
             <input
               type="text"
-              placeholder="美容院名や地域で検索..."
+              placeholder="Search by salon name or area..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="input-field flex-1"
             />
             <button type="submit" className="btn-primary">
-              検索
+              Search
             </button>
           </div>
         </form>
@@ -126,7 +126,7 @@ export default function SalonsPage() {
                     href={`/salons/${salon.id}`}
                     className="btn-primary"
                   >
-                    詳細を見る
+                    View Details
                   </a>
                 </div>
               </div>
@@ -136,7 +136,7 @@ export default function SalonsPage() {
           {salons.length === 0 && !loading && (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
-                検索条件に一致する美容院が見つかりませんでした。
+                No beauty salons found matching your search criteria.
               </p>
             </div>
           )}

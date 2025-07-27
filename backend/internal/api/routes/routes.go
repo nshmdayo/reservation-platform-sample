@@ -11,43 +11,43 @@ import (
 func SetupRoutes() *gin.Engine {
 	r := gin.Default()
 
-	// CORS設定
+	// CORS configuration
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	r.Use(cors.New(config))
 
-	// API v1 ルートグループ
+	// API v1 route group
 	api := r.Group("/api")
 	{
-		// 認証不要のルート
+		// Routes that don't require authentication
 		auth := api.Group("/auth")
 		{
 			auth.POST("/register", handlers.Register)
 			auth.POST("/login", handlers.Login)
 		}
 
-		// 美容院関連（認証不要）
+		// Salon related (no authentication required)
 		api.GET("/salons", handlers.GetSalons)
 		api.GET("/salons/:id", handlers.GetSalon)
 		api.GET("/salons/:salon_id/slots", handlers.GetAvailableSlots)
 
-		// 認証が必要なルート
+		// Routes that require authentication
 		protected := api.Group("")
 		protected.Use(middleware.AuthMiddleware())
 		{
-			// ユーザー関連
+			// User related
 			protected.GET("/auth/me", handlers.GetProfile)
 
-			// 予約関連
+			// Reservation related
 			protected.GET("/reservations", handlers.GetReservations)
 			protected.GET("/reservations/:id", handlers.GetReservation)
 			protected.POST("/reservations", handlers.CreateReservation)
 			protected.PUT("/reservations/:id", handlers.UpdateReservation)
 			protected.DELETE("/reservations/:id", handlers.DeleteReservation)
 
-			// 管理者のみのルート（TODO: 管理者認証ミドルウェア追加）
+			// Admin only routes (TODO: Add admin authentication middleware)
 			admin := protected.Group("/admin")
 			{
 				admin.POST("/salons", handlers.CreateSalon)

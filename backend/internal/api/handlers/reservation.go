@@ -12,11 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetReservations 予約一覧取得
+// GetReservations Get reservation list
 func GetReservations(c *gin.Context) {
 	var reservations []models.Reservation
 
-	// ユーザーIDをコンテキストから取得（認証ミドルウェアで設定）
+	// Get user ID from context (set by authentication middleware)
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -35,7 +35,7 @@ func GetReservations(c *gin.Context) {
 	c.JSON(http.StatusOK, reservations)
 }
 
-// GetReservation 予約詳細取得
+// GetReservation Get reservation details
 func GetReservation(c *gin.Context) {
 	id := c.Param("id")
 	var reservation models.Reservation
@@ -58,7 +58,7 @@ func GetReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, reservation)
 }
 
-// CreateReservation 予約作成
+// CreateReservation Create reservation
 func CreateReservation(c *gin.Context) {
 	var reservation models.Reservation
 
@@ -75,7 +75,7 @@ func CreateReservation(c *gin.Context) {
 
 	reservation.UserID = userID.(uint)
 
-	// 予約のバリデーション
+	// Validate reservation
 	if err := validateReservation(&reservation); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -86,13 +86,13 @@ func CreateReservation(c *gin.Context) {
 		return
 	}
 
-	// 作成した予約を関連データと一緒に返す
+	// Return the created reservation with related data
 	database.DB.Preload("Salon").Preload("Staff").Preload("Service").First(&reservation, reservation.ID)
 
 	c.JSON(http.StatusCreated, reservation)
 }
 
-// UpdateReservation 予約更新
+// UpdateReservation Update reservation
 func UpdateReservation(c *gin.Context) {
 	id := c.Param("id")
 	var reservation models.Reservation
@@ -113,7 +113,7 @@ func UpdateReservation(c *gin.Context) {
 		return
 	}
 
-	// 予約のバリデーション
+	// Validate reservation
 	if err := validateReservation(&reservation); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -127,7 +127,7 @@ func UpdateReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, reservation)
 }
 
-// DeleteReservation 予約キャンセル
+// DeleteReservation Cancel reservation
 func DeleteReservation(c *gin.Context) {
 	id := c.Param("id")
 	var reservation models.Reservation
@@ -143,7 +143,7 @@ func DeleteReservation(c *gin.Context) {
 		return
 	}
 
-	// 予約ステータスをキャンセルに変更
+	// Change reservation status to cancelled
 	reservation.Status = "cancelled"
 	if err := database.DB.Save(&reservation).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to cancel reservation"})
@@ -153,7 +153,7 @@ func DeleteReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Reservation cancelled successfully"})
 }
 
-// GetAvailableSlots 空き時間取得
+// GetAvailableSlots Get available time slots
 func GetAvailableSlots(c *gin.Context) {
 	salonID := c.Param("salon_id")
 	staffID := c.Query("staff_id")
@@ -179,14 +179,14 @@ func GetAvailableSlots(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"slots": slots})
 }
 
-// validateReservation 予約のバリデーション
+// validateReservation Validate reservation
 func validateReservation(reservation *models.Reservation) error {
-	// 過去の日時チェック
+	// Check for past date/time
 	if reservation.StartTime.Before(time.Now()) {
 		return errors.New("cannot book past dates")
 	}
 
-	// ダブルブッキングチェック
+	// Check for double booking
 	var existingReservation models.Reservation
 	err := database.DB.Where(
 		"staff_id = ? AND reservation_date = ? AND status != 'cancelled' AND ((start_time <= ? AND end_time > ?) OR (start_time < ? AND end_time >= ?))",
@@ -205,9 +205,9 @@ func validateReservation(reservation *models.Reservation) error {
 	return nil
 }
 
-// getAvailableSlots 空き時間計算
+// getAvailableSlots Calculate available time slots
 func getAvailableSlots(salonID, staffID string, date time.Time) ([]string, error) {
-	// スタッフの勤務時間を取得
+	// Get staff working hours
 	var staff models.Staff
 	query := database.DB.Where("salon_id = ?", salonID)
 	if staffID != "" {
@@ -218,7 +218,7 @@ func getAvailableSlots(salonID, staffID string, date time.Time) ([]string, error
 		return nil, err
 	}
 
-	// その日の既存予約を取得
+	// Get existing reservations for that day
 	var reservations []models.Reservation
 	err := database.DB.Where(
 		"staff_id = ? AND reservation_date = ? AND status != 'cancelled'",
@@ -230,12 +230,12 @@ func getAvailableSlots(salonID, staffID string, date time.Time) ([]string, error
 		return nil, err
 	}
 
-	// 空き時間を計算（簡易版）
-	// 実際の実装では、営業時間、スタッフの勤務時間、既存予約を考慮して計算
+	// Calculate available time slots (simplified version)
+	// In actual implementation, consider business hours, staff working hours, and existing reservations
 	var slots []string
 	for hour := 9; hour <= 17; hour++ {
 		timeSlot := strconv.Itoa(hour) + ":00"
-		// TODO: 既存予約との重複チェック
+		// TODO: Check for overlap with existing reservations
 		slots = append(slots, timeSlot)
 	}
 

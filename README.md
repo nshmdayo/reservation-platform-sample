@@ -1,203 +1,203 @@
-# 美容院予約システム
+# Beauty Salon Reservation System
 
-ホットペッパーのような美容院の予約システムです。フロントエンドはNext.js + TypeScript + Tailwind CSS、バックエンドはGo + Gin + PostgreSQLで構築されています。
+A beauty salon reservation system similar to HotPepper. Built with Next.js + TypeScript + Tailwind CSS for the frontend and Go + Gin + PostgreSQL for the backend.
 
-## 技術スタック
+## Technology Stack
 
-### フロントエンド
+### Frontend
 - Next.js 14 (App Router)
 - TypeScript
 - Tailwind CSS
-- SWR (データフェッチング)
-- React Hook Form (フォーム管理)
-- Axios (HTTP クライアント)
+- SWR (Data fetching)
+- React Hook Form (Form management)
+- Axios (HTTP client)
 
-### バックエンド
+### Backend
 - Go 1.21+
-- Gin (Webフレームワーク)
+- Gin (Web framework)
 - GORM (ORM)
-- PostgreSQL (データベース)
-- Redis (キャッシュ・セッション)
-- JWT (認証)
+- PostgreSQL (Database)
+- Redis (Cache & Session)
+- JWT (Authentication)
 
-## プロジェクト構成
+## Project Structure
 
 ```
-├── frontend/          # Next.jsフロントエンド
+├── frontend/          # Next.js frontend
 │   ├── src/
-│   │   ├── app/      # App Routerページ
-│   │   ├── components/ # UIコンポーネント
-│   │   └── lib/      # API、型定義、ユーティリティ
+│   │   ├── app/      # App Router pages
+│   │   ├── components/ # UI components
+│   │   └── lib/      # API, type definitions, utilities
 │   ├── package.json
 │   └── tailwind.config.js
-├── backend/           # Go バックエンド
+├── backend/           # Go backend
 │   ├── cmd/
-│   │   ├── server/   # 本番用サーバー
-│   │   └── demo/     # デモ用サーバー
+│   │   ├── server/   # Production server
+│   │   └── demo/     # Demo server
 │   ├── internal/
-│   │   ├── api/      # HTTPハンドラー・ルート
-│   │   ├── domain/   # ドメインモデル
-│   │   ├── infrastructure/ # DB・外部サービス
-│   │   └── services/ # ビジネスロジック
+│   │   ├── api/      # HTTP handlers & routes
+│   │   ├── domain/   # Domain models
+│   │   ├── infrastructure/ # DB & external services
+│   │   └── services/ # Business logic
 │   ├── go.mod
 │   └── Dockerfile
-├── docker-compose.yml # 開発環境用Docker設定
+├── docker-compose.yml # Docker configuration for development
 └── .github/
-    └── instructions/  # 実装指示書
+    └── instructions/  # Implementation guides
 ```
 
-## クイックスタート
+## Quick Start
 
-### 1. リポジトリのクローン
+### 1. Clone the Repository
 ```bash
 git clone <repository-url>
 cd reservation-platform-sample
 ```
 
-### 2. フロントエンドのセットアップ
+### 2. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-フロントエンドは http://localhost:3000 で起動します。
+Frontend runs at http://localhost:3000
 
-### 3. バックエンドのセットアップ
+### 3. Backend Setup
 
-#### 本格的な開発環境（PostgreSQL + Redis）
+#### Full Development Environment (PostgreSQL + Redis)
 ```bash
-# Docker環境の起動
+# Start Docker environment
 docker-compose up -d
 
-# バックエンドの起動
+# Start backend
 cd backend
 go mod download
 go run cmd/server/main.go
 ```
 
-#### デモ環境（データベース不要）
+#### Demo Environment (No database required)
 ```bash
 cd backend
 go mod download
 go run cmd/demo/main.go
 ```
-バックエンドAPIは http://localhost:8081 で起動します。
+Backend API runs at http://localhost:8081
 
-### 4. アクセス先
-- **フロントエンド**: http://localhost:3000
-- **バックエンド API**: http://localhost:8081
-- **API健康状態**: http://localhost:8081/health
+### 4. Access Points
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8081
+- **API Health Check**: http://localhost:8081/health
 - **PostgreSQL**: localhost:5432
 - **Redis**: localhost:6379
-- **Adminer (DB管理)**: http://localhost:8081
+- **Adminer (DB Management)**: http://localhost:8081
 
-## 主な機能
+## Key Features
 
-### ✅ 実装済み機能
+### ✅ Implemented Features
 
-#### ユーザー向け
-- 🏠 **ホームページ** - サービス紹介とナビゲーション
-- 🔍 **美容院検索・一覧表示** - 名前や地域での検索
-- 🏪 **美容院詳細情報** - 店舗情報、スタッフ、メニュー表示
-- 📅 **予約カレンダー・空き時間確認** - リアルタイム空き状況
-- ✏️ **予約フォーム** - スタッフ・メニュー・日時選択
-- 📋 **予約確認・管理** - 予約一覧・詳細・キャンセル
+#### User Features
+- 🏠 **Homepage** - Service introduction and navigation
+- 🔍 **Salon Search & Listing** - Search by name or location
+- 🏪 **Salon Detail Information** - Store info, staff, and menu display
+- 📅 **Booking Calendar & Availability Check** - Real-time availability status
+- ✏️ **Booking Form** - Staff, menu, and date/time selection
+- 📋 **Reservation Management** - Reservation list, details, and cancellation
 
-#### システム機能
-- 🎨 **レスポンシブデザイン** - モバイルファースト
-- 🔒 **認証システム** - JWT認証（デモ実装）
-- 🌐 **REST API** - CORS対応、適切なHTTPステータス
-- 📊 **エラーハンドリング** - ユーザーフレンドリーなエラー表示
+#### System Features
+- 🎨 **Responsive Design** - Mobile first
+- 🔒 **Authentication System** - JWT authentication (demo implementation)
+- 🌐 **REST API** - CORS support, proper HTTP status codes
+- 📊 **Error Handling** - User-friendly error display
 
-### 🚧 今後の実装予定
+### 🚧 Future Implementation Plans
 
-#### ユーザー機能
-- ユーザー登録・ログイン機能
-- プロフィール管理
-- お気に入り美容院機能
-- 予約履歴・レビュー機能
+#### User Features
+- User registration & login functionality
+- Profile management
+- Favorite salon feature
+- Reservation history & review functionality
 
-#### 管理者機能
-- 美容院情報管理画面
-- スタッフ管理
-- サービス・メニュー管理
-- 予約管理ダッシュボード
-- 売上レポート
+#### Admin Features
+- Salon information management screen
+- Staff management
+- Service & menu management
+- Reservation management dashboard
+- Sales reports
 
-#### 高度な機能
-- 位置情報ベース検索
-- プッシュ通知
-- 決済機能
-- レビュー・評価システム
+#### Advanced Features
+- Location-based search
+- Push notifications
+- Payment functionality
+- Review & rating system
 
-## 開発ガイド
+## Development Guide
 
-### API エンドポイント
+### API Endpoints
 
-#### 美容院関連
+#### Salon Related
 ```
-GET  /api/salons           # 美容院一覧
-GET  /api/salons/:id       # 美容院詳細
-GET  /api/salons/:id/slots # 空き時間取得
-```
-
-#### 予約関連
-```
-POST /api/reservations     # 予約作成
-GET  /api/reservations     # 予約一覧
-GET  /api/reservations/:id # 予約詳細
-PUT  /api/reservations/:id # 予約更新
-DELETE /api/reservations/:id # 予約キャンセル
+GET  /api/salons           # Salon list
+GET  /api/salons/:id       # Salon details
+GET  /api/salons/:id/slots # Get available time slots
 ```
 
-#### 認証関連
+#### Reservation Related
 ```
-POST /api/auth/register    # ユーザー登録
-POST /api/auth/login       # ログイン
-GET  /api/auth/me          # ユーザー情報取得
+POST /api/reservations     # Create reservation
+GET  /api/reservations     # Reservation list
+GET  /api/reservations/:id # Reservation details
+PUT  /api/reservations/:id # Update reservation
+DELETE /api/reservations/:id # Cancel reservation
 ```
 
-### コードスタイル
+#### Authentication Related
+```
+POST /api/auth/register    # User registration
+POST /api/auth/login       # Login
+GET  /api/auth/me          # Get user information
+```
 
-- **フロントエンド**: TypeScript + ESLint + Prettier
-- **バックエンド**: Go fmt + golint
+### Code Style
 
-### テスト
+- **Frontend**: TypeScript + ESLint + Prettier
+- **Backend**: Go fmt + golint
+
+### Testing
 ```bash
-# フロントエンドテスト
+# Frontend tests
 cd frontend
 npm test
 
-# バックエンドテスト
+# Backend tests
 cd backend
 go test ./...
 ```
 
-## デプロイ
+## Deployment
 
 ### Docker
 ```bash
-# 全体のビルド
+# Build everything
 docker-compose -f docker-compose.prod.yml up --build
 
-# 個別のビルド
+# Individual builds
 docker build -t reservation-frontend ./frontend
 docker build -t reservation-backend ./backend
 ```
 
-## コントリビューション
+## Contributing
 
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## ライセンス
+## License
 
-このプロジェクトはMITライセンスの下で公開されています。
+This project is released under the MIT License.
 
-## 開発参考資料
+## Development References
 
-- [フロントエンド実装指示書](./.github/instructions/frontend.md)
-- [バックエンド実装指示書](./.github/instructions/backend.md)
+- [Frontend Implementation Guide](./.github/instructions/frontend.md)
+- [Backend Implementation Guide](./.github/instructions/backend.md)

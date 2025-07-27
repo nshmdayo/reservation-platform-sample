@@ -10,11 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetSalons 美容院一覧取得
+// GetSalons Get salon list
 func GetSalons(c *gin.Context) {
 	var salons []models.Salon
 
-	// クエリパラメータの取得
+	// Get query parameters
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	search := c.Query("search")
@@ -23,7 +23,7 @@ func GetSalons(c *gin.Context) {
 
 	query := database.DB.Preload("Staff").Preload("Services")
 
-	// 検索条件
+	// Search conditions
 	if search != "" {
 		query = query.Where("name ILIKE ? OR address ILIKE ?", "%"+search+"%", "%"+search+"%")
 	}
@@ -40,7 +40,7 @@ func GetSalons(c *gin.Context) {
 	})
 }
 
-// GetSalon 美容院詳細取得
+// GetSalon Get salon details
 func GetSalon(c *gin.Context) {
 	id := c.Param("id")
 	var salon models.Salon
@@ -53,7 +53,7 @@ func GetSalon(c *gin.Context) {
 	c.JSON(http.StatusOK, salon)
 }
 
-// CreateSalon 美容院作成
+// CreateSalon Create salon
 func CreateSalon(c *gin.Context) {
 	var salon models.Salon
 
@@ -70,7 +70,7 @@ func CreateSalon(c *gin.Context) {
 	c.JSON(http.StatusCreated, salon)
 }
 
-// UpdateSalon 美容院更新
+// UpdateSalon Update salon
 func UpdateSalon(c *gin.Context) {
 	id := c.Param("id")
 	var salon models.Salon
@@ -93,7 +93,7 @@ func UpdateSalon(c *gin.Context) {
 	c.JSON(http.StatusOK, salon)
 }
 
-// DeleteSalon 美容院削除
+// DeleteSalon Delete salon
 func DeleteSalon(c *gin.Context) {
 	id := c.Param("id")
 	var salon models.Salon

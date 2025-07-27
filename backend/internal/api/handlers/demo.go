@@ -9,14 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetSalonsDemo デモ用美容院一覧取得
+// GetSalonsDemo Demo salon list retrieval
 func GetSalonsDemo(c *gin.Context) {
 	salons := []models.Salon{
 		{
 			ID:          1,
 			Name:        "Hair Salon Tokyo",
-			Description: "東京で人気の美容院です。経験豊富なスタイリストが最新のトレンドを取り入れながら、お客様一人一人に合ったスタイルをご提案いたします。",
-			Address:     "東京都渋谷区渋谷1-1-1 サンプルビル3F",
+			Description: "A popular beauty salon in Tokyo. Experienced stylists incorporate the latest trends while proposing styles that suit each customer individually.",
+			Address:     "Sample Building 3F, 1-1-1 Shibuya, Shibuya-ku, Tokyo",
 			Phone:       "03-1234-5678",
 			Email:       "info@hairsalon-tokyo.com",
 			ImageURL:    "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800",
@@ -24,8 +24,8 @@ func GetSalonsDemo(c *gin.Context) {
 		{
 			ID:          2,
 			Name:        "Beauty Studio Shibuya",
-			Description: "スタイリッシュなカットとカラーが自慢の美容院です。モダンな空間でリラックスしながら、理想のヘアスタイルを実現します。",
-			Address:     "東京都渋谷区渋谷2-2-2 ビューティービル2F",
+			Description: "A beauty salon known for stylish cuts and colors. Realize your ideal hairstyle while relaxing in a modern space.",
+			Address:     "Beauty Building 2F, 2-2-2 Shibuya, Shibuya-ku, Tokyo",
 			Phone:       "03-2345-6789",
 			Email:       "contact@beauty-shibuya.com",
 			ImageURL:    "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800",
@@ -33,8 +33,8 @@ func GetSalonsDemo(c *gin.Context) {
 		{
 			ID:          3,
 			Name:        "Cut & Color Harajuku",
-			Description: "カラーリングの専門店です。個性的なスタイルから上品なカラーまで、幅広いニーズにお応えします。",
-			Address:     "東京都渋谷区神宮前1-1-1 ファッションビル4F",
+			Description: "Hair coloring specialty salon. We cater to a wide range of needs from unique styles to elegant colors.",
+			Address:     "1-1-1 Jingumae, Shibuya-ku, Tokyo Fashion Building 4F",
 			Phone:       "03-3456-7890",
 			Email:       "info@cutcolor-harajuku.com",
 			ImageURL:    "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800",
@@ -48,7 +48,7 @@ func GetSalonsDemo(c *gin.Context) {
 	})
 }
 
-// GetSalonDemo デモ用美容院詳細取得
+// GetSalonDemo Demo beauty salon details
 func GetSalonDemo(c *gin.Context) {
 	id := c.Param("id")
 	salonID, _ := strconv.Atoi(id)
@@ -56,8 +56,8 @@ func GetSalonDemo(c *gin.Context) {
 	salon := models.Salon{
 		ID:          uint(salonID),
 		Name:        "Hair Salon Tokyo",
-		Description: "東京で人気の美容院です。経験豊富なスタイリストが、お客様一人一人に合ったスタイルをご提案いたします。リラックスできる空間で、上質なサービスをお楽しみください。",
-		Address:     "東京都渋谷区渋谷1-1-1 サンプルビル3F",
+		Description: "Popular beauty salon in Tokyo. Our experienced stylists will propose styles that suit each customer individually. Enjoy high-quality service in a relaxing space.",
+		Address:     "1-1-1 Shibuya, Shibuya-ku, Tokyo Sample Building 3F",
 		Phone:       "03-1234-5678",
 		Email:       "info@hairsalon-tokyo.com",
 		Website:     "https://hairsalon-tokyo.com",
@@ -66,20 +66,20 @@ func GetSalonDemo(c *gin.Context) {
 			{
 				ID:              1,
 				SalonID:         uint(salonID),
-				Name:            "田中 美咲",
-				Description:     "10年の経験を持つスタイリスト。カットとカラーが得意です。お客様のライフスタイルに合わせたスタイルをご提案します。",
+				Name:            "Misaki Tanaka",
+				Description:     "Stylist with 10 years of experience. Specializes in cuts and coloring. I propose styles that match customers' lifestyles.",
 				ImageURL:        "https://images.unsplash.com/photo-1494790108755-2616c9f9e6f5?w=400",
-				Specialties:     []string{"カット", "カラー"},
+				Specialties:     []string{"Cut", "Color"},
 				ExperienceYears: 10,
 				IsActive:        true,
 			},
 			{
 				ID:              2,
 				SalonID:         uint(salonID),
-				Name:            "佐藤 健太",
-				Description:     "パーマとセットが得意なスタイリストです。トレンドを取り入れた最新のスタイルをお楽しみください。",
+				Name:            "Kenta Sato",
+				Description:     "Stylist specializing in perms and styling. Enjoy the latest styles incorporating trends.",
 				ImageURL:        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-				Specialties:     []string{"パーマ", "セット"},
+				Specialties:     []string{"Perm", "Styling"},
 				ExperienceYears: 8,
 				IsActive:        true,
 			},
@@ -88,17 +88,17 @@ func GetSalonDemo(c *gin.Context) {
 			{
 				ID:              1,
 				SalonID:         uint(salonID),
-				Name:            "カット",
-				Description:     "シャンプー・ブロー込み",
+				Name:            "Cut",
+				Description:     "Includes shampoo and blow dry",
 				Price:           4000,
 				DurationMinutes: 60,
-				Category:        "カット",
+				Category:        "Cut",
 				IsActive:        true,
 			},
 			{
 				ID:              2,
 				SalonID:         uint(salonID),
-				Name:            "カット + カラー",
+				Name:            "Cut + Color",
 				Description:     "カット＋カラーリング＋シャンプー・ブロー",
 				Price:           8000,
 				DurationMinutes: 120,

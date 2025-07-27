@@ -10,15 +10,15 @@ import (
 )
 
 func main() {
-	// 設定読み込み
+	// Load configuration
 	cfg := config.LoadConfig()
 
-	// デモモードの確認
+	// Check demo mode
 	demoMode := os.Getenv("DEMO_MODE") == "true"
 
 	if demoMode {
 		log.Println("Starting server in DEMO mode (no database required)")
-		// デモ用ルート設定
+		// Demo route configuration
 		r := routes.SetupDemoRoutes()
 		log.Printf("Demo server starting on port %s", cfg.Port)
 		if err := r.Run(":" + cfg.Port); err != nil {
@@ -27,23 +27,23 @@ func main() {
 		return
 	}
 
-	// 通常モード（データベース接続あり）
+	// Normal mode (with database connection)
 	log.Println("Starting server in PRODUCTION mode")
 
-	// データベース接続
+	// Database connection
 	if err := database.Connect(cfg); err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	// マイグレーション実行
+	// Run migrations
 	if err := database.Migrate(); err != nil {
 		log.Fatal("Failed to migrate database:", err)
 	}
 
-	// ルート設定
+	// Route configuration
 	r := routes.SetupRoutes()
 
-	// サーバー起動
+	// Start server
 	log.Printf("Server starting on port %s", cfg.Port)
 	if err := r.Run(":" + cfg.Port); err != nil {
 		log.Fatal("Failed to start server:", err)

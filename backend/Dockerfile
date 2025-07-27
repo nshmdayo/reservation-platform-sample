@@ -2,26 +2,26 @@ FROM golang:1.21-alpine AS builder
 
 WORKDIR /app
 
-# go mod と go sum をコピー
+# Copy go mod and go sum files
 COPY go.mod go.sum ./
 
-# 依存関係をダウンロード
+# Download dependencies
 RUN go mod download
 
-# ソースコードをコピー
+# Copy source code
 COPY . .
 
-# バイナリをビルド
+# Build binary
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main cmd/server/main.go
 
-# 本番用イメージ
+# Production image
 FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
-# バイナリをコピー
+# Copy binary
 COPY --from=builder /app/main .
 
 EXPOSE 8080

@@ -8,9 +8,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("your-secret-key") // 本来は環境変数から取得
+var jwtSecret = []byte("your-secret-key") // Should be obtained from environment variables
 
-// AuthMiddleware JWT認証ミドルウェア
+// AuthMiddleware JWT authentication middleware
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -20,7 +20,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Bearer トークンの抽出
+		// Extract Bearer token
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		if tokenString == authHeader {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization format"})
@@ -28,7 +28,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// トークンの検証
+		// Verify token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return jwtSecret, nil
 		})
@@ -39,7 +39,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// ユーザーIDをコンテキストに設定
+		// Set user ID in context
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})

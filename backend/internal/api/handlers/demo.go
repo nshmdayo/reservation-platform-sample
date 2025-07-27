@@ -99,20 +99,20 @@ func GetSalonDemo(c *gin.Context) {
 				ID:              2,
 				SalonID:         uint(salonID),
 				Name:            "Cut + Color",
-				Description:     "カット＋カラーリング＋シャンプー・ブロー",
+				Description:     "Cut + Coloring + Shampoo & Blow Dry",
 				Price:           8000,
 				DurationMinutes: 120,
-				Category:        "カラー",
+				Category:        "Color",
 				IsActive:        true,
 			},
 			{
 				ID:              3,
 				SalonID:         uint(salonID),
-				Name:            "パーマ",
-				Description:     "パーマ＋カット＋シャンプー・ブロー",
+				Name:            "Perm",
+				Description:     "Perm + Cut + Shampoo & Blow Dry",
 				Price:           10000,
 				DurationMinutes: 150,
-				Category:        "パーマ",
+				Category:        "Perm",
 				IsActive:        true,
 			},
 		},
@@ -121,7 +121,7 @@ func GetSalonDemo(c *gin.Context) {
 	c.JSON(http.StatusOK, salon)
 }
 
-// GetAvailableSlotsDemo デモ用空き時間取得
+// GetAvailableSlotsDemo Demo available time slots
 func GetAvailableSlotsDemo(c *gin.Context) {
 	slots := []string{
 		"09:00", "09:30", "10:00", "10:30", "11:00", "11:30",

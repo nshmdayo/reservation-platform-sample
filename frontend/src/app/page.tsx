@@ -1,14 +1,7 @@
 export default function Home() {
-           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Beauty Reserve Features
-            </h2>
-            <p className="text-xl text-gray-600">
-              Simple, convenient, and secure beauty salon reservation system
-            </p> (
+  return (
     <div className="min-h-screen">
       {/* Hero Section */}
-            {/* Hero Section */}
       <section className="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
@@ -35,7 +28,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */
+      {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -109,12 +102,12 @@ export default function Home() {
                 </h3>
                 <p className="text-gray-600 mb-2">Shibuya, Tokyo</p>
                 <p className="text-gray-500 text-sm mb-4">
-                  カット、カラー、パーマなど幅広いメニューをご用意しています
+                  We offer a wide range of services including cuts, colors, and perms
                 </p>
                 <div className="flex justify-between items-center">
-                  <span className="text-primary-600 font-semibold">￥3,000〜</span>
+                  <span className="text-primary-600 font-semibold">¥3,000〜</span>
                   <a href={`/salons/${i}`} className="btn-primary">
-                    詳細を見る
+                    View Details
                   </a>
                 </div>
               </div>
@@ -123,11 +116,11 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <a href="/salons" className="btn-primary text-lg px-8 py-3">
-              もっと見る
+              View More
             </a>
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -1,3 +1,60 @@
 {
-  "pages": {}
+  "pages": {
+    "/_not-found": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/app/_not-found-352713f74bf9de0e.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/870-9f94733da0eef4d7.js",
+      "static/css/47d29574374f37cc.css",
+      "static/chunks/app/layout-98dd177fe06766b2.js"
+    ],
+    "/reservations/page": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/737-d3d0ca1083be14df.js",
+      "static/chunks/app/reservations/page-83ac2a7736d13e3b.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/app/page-83aba23901e55958.js"
+    ],
+    "/salons/[id]/page": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/737-d3d0ca1083be14df.js",
+      "static/chunks/app/salons/[id]/page-c298b1d5a814a5fe.js"
+    ],
+    "/salons/page": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/737-d3d0ca1083be14df.js",
+      "static/chunks/app/salons/page-c1afa21fbf68f8fe.js"
+    ],
+    "/salons/[id]/booking/page": [
+      "static/chunks/webpack-4ff9390befa4962b.js",
+      "static/chunks/fd9d1056-516b58327fb05db5.js",
+      "static/chunks/938-f464a3b2301c5ba9.js",
+      "static/chunks/main-app-cae318504695e574.js",
+      "static/chunks/737-d3d0ca1083be14df.js",
+      "static/chunks/540-5ca6ada7d5595e38.js",
+      "static/chunks/app/salons/[id]/booking/page-526e3357cb90a9dd.js"
+    ]
+  }
 }

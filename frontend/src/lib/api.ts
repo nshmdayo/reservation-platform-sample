@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AuthResponse, LoginRequest, RegisterRequest, Salon, Reservation } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8081/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8082/api';
 
 // Axiosインスタンスの作成
 const api = axios.create({
